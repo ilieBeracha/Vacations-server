@@ -5,7 +5,6 @@ import { deleteImageFromS3, saveImagesToS3 } from "./awsLogic";
 const uniqid = require('uniqid');
 
 export async function getAllVacations(offset: number) {
-
     const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName FROM vacations ORDER BY startingDate LIMIT 10 OFFSET ${offset}`;
     const [results] = await execute<OkPacket>(query);
     return results;
@@ -50,5 +49,27 @@ export async function editVacation(vacation: VacationInterface, file: any) {
         return results;
     }
 
+}
+
+export async function getSumOfVacations() {
+    const query = 'SELECT count(*) as vacationsSum FROM vacations';
+    const [results] = await execute(query);
+    return results;
+}
+
+export async function getLikedVacations(id: number) {
+    // const 
+}
+
+export async function getActiveVacations(offset:number) {
+    const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName FROM vacations where startingDate < now() AND endingDate > now() LIMIT 10 OFFSET ${offset}`
+    const [results] = await execute(query);
+    return results;
+}
+
+export async function getComingVacations() {
+    const query = 'select * from vacations where startingDate > now()'
+    const [results] = await execute(query);
+    return results;
 }
 

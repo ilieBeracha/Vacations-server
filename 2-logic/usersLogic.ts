@@ -25,6 +25,12 @@ export async function register(user: UserInterface) {
     }
 }
 
+export async function getUserById(id: number) {
+    const query = 'SELECT * FROM users WHERE id = ?'
+    const [results] = await execute<OkPacket>(query, [id]);
+    return results;
+}
+
 // export async function login(email: string, password: string) {
 //     const query = 'SELECT * FROM users WHERE email = ? AND password = ?'
 //     const [results] = await execute<OkPacket>(query, [email, hashedPassword(password)])

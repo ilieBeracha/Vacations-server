@@ -10,5 +10,15 @@ export async function generateToken(user: UserInterface) {
         'lastName': user.lastName,
         'email': user.email,
         'role': user.role
-    }, PRIVATE_KEY, { expiresIn: '2h' })
+    }, PRIVATE_KEY)
+}
+
+
+export async function getIdFromToken(token: any) {    
+    try {
+        const verifyToken = jwt.verify(token.substring(7), PRIVATE_KEY);
+        return verifyToken.sub
+    } catch (e) {
+        return e
+    }
 }
