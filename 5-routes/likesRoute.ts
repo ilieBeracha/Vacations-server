@@ -1,6 +1,6 @@
 import express from 'express';
 import { getIdFromToken } from '../1-dal/jwt';
-import { getLikesCountPerVacation, likeOrUnlikeVacation } from '../2-logic/likesLogic';
+import { getAllLikesForGraph, getLikesCountPerVacation, likeOrUnlikeVacation } from '../2-logic/likesLogic';
 import { verifyUser } from '../3-middlewares/verifyUser';
 
 export const LikesRoute = express.Router();
@@ -25,6 +25,15 @@ LikesRoute.get('/likes/vacation/:vacationid', verifyUser, async (req: any, res: 
         const response = await getLikesCountPerVacation(+vacationId, Number(userId))
         res.status(200).json(response);
     } catch (e) {
+        res.status(400).json(e)
+    }
+})
+
+LikesRoute.get('/likes/graph',async (req,res)=>{
+    try{
+        const response = await getAllLikesForGraph();
+        res.status(200).json(response);
+    }catch(e){
         res.status(400).json(e)
     }
 })

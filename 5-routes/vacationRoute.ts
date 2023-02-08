@@ -1,6 +1,6 @@
 import express from 'express';
 import { execute } from '../1-dal/dalSql';
-import { addVacation, deleteVacation, editVacation, getActiveVacations, getAllVacations, getComingVacations, getSumOfVacations } from '../2-logic/vacationLogic';
+import { addVacation, deleteVacation, editVacation, getActiveVacations, getAllVacations, getComingVacations, getSumOfActiveVacation, getSumOfComingVacation, getSumOfVacations } from '../2-logic/vacationLogic';
 import { verifyUser } from '../3-middlewares/verifyUser';
 
 export const VacationRoute = express.Router();
@@ -60,11 +60,19 @@ VacationRoute.get('/vacation/sum', async (req, res) => {
 
 VacationRoute.get('/vacation/active',async (req,res)=>{
     const offset = req.query.offset || 0
-
     try{
         const response = await getActiveVacations(+offset);
         res.status(200).json(response);
     }catch(e){
+        res.status(400).json(e)
+    }
+})
+
+VacationRoute.get('/vacation/active/sum',async (req,res)=>{
+    try {
+        const response = await getSumOfActiveVacation();
+        res.status(200).json(response)
+    } catch (e) {
         res.status(400).json(e)
     }
 })
@@ -74,6 +82,15 @@ VacationRoute.get('/vacation/coming',async (req,res)=>{
         const response = await getComingVacations();
         res.status(200).json(response);
     }catch(e){
+        res.status(400).json(e)
+    }
+})
+
+VacationRoute.get('/vacation/coming/sum',async (req,res)=>{
+    try {
+        const response = await getSumOfComingVacation();
+        res.status(200).json(response)
+    } catch (e) {
         res.status(400).json(e)
     }
 })

@@ -30,3 +30,9 @@ export async function getLikesCountPerVacation(vacationId:number,userId: number)
     const [results] = await execute(query);
     return results;
 }
+
+export async function getAllLikesForGraph(){
+    const query = 'SELECT vacations.destination, COUNT(likes.vacationId) as likes FROM vacations LEFT JOIN likes ON vacations.id = likes.vacationId GROUP BY vacations.destination'
+    const [results] = await execute(query);
+    return results;
+}

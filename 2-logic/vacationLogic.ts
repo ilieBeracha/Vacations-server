@@ -67,8 +67,20 @@ export async function getActiveVacations(offset:number) {
     return results;
 }
 
+export async function getSumOfActiveVacation(){
+    const query = 'SELECT count(*) as vacationsSum FROM vacations WHERE startingDate < now() AND endingDate > now()'
+    const [results] = await execute(query);
+    return results;
+}
+
 export async function getComingVacations() {
-    const query = 'select * from vacations where startingDate > now()'
+    const query = 'SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName FROM vacations where startingDate > now()'
+    const [results] = await execute(query);
+    return results;
+}
+
+export async function getSumOfComingVacation(){
+    const query = 'SELECT count(*) as vacationsSum FROM vacations where startingDate > now()'
     const [results] = await execute(query);
     return results;
 }
