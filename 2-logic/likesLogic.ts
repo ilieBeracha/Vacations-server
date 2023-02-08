@@ -16,21 +16,6 @@ export async function likeOrUnlikeVacation(userId: number, vacationId: number) {
     }
 }
 
-export async function getLikesCountPerVacation(vacationId:number,userId: number) {
-    const query = `SELECT vacations.id, COUNT(likes.vacationId) AS likes,
-    CASE WHEN EXISTS (SELECT * FROM likes 
-                     WHERE likes.vacationId = vacations.id 
-                     AND likes.userId = ${userId} 
-                     AND vacations.id = ${vacationId}) THEN 'true' ELSE 'false' END AS liked 
-    FROM vacations 
-    JOIN likes ON vacations.id = likes.vacationId 
-    WHERE vacations.id = ${vacationId}
-    GROUP BY vacations.id`;
-
-    const [results] = await execute(query);
-    return results;
-}
-
 export async function getAllLikesForGraph(){
     const query = 'SELECT vacations.destination, COUNT(likes.vacationId) as likes FROM vacations LEFT JOIN likes ON vacations.id = likes.vacationId GROUP BY vacations.destination'
     const [results] = await execute(query);
