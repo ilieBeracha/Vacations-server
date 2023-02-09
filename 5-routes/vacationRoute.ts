@@ -9,7 +9,9 @@ export const VacationRoute = express.Router();
 VacationRoute.get('/vacation', verifyUser, async (req: any, res: any) => {
     const offset = req.query.offset || 0
     try {
-        const response = await getAllVacations(+offset);
+        const token = req.headers.authorization;
+        const userId: any = await getIdFromToken(token);
+        const response = await getAllVacations(userId,+offset);
         res.status(200).json(response)
     } catch (e) {
         res.status(400).json(e)

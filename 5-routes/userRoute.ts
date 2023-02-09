@@ -7,6 +7,7 @@ import { UserInterface } from '../4-models/UserModel';
 export const UserRoute = express.Router();
 
 UserRoute.post('/register', async (req, res) => {
+    
     const user: UserInterface = req.body;
     user.password = hashedPassword(user.password)
     try {
@@ -20,6 +21,8 @@ UserRoute.post('/register', async (req, res) => {
 
     } catch (e) {
         res.status(400).json(e)
+        console.log(e);
+        
     }
 })
 
@@ -38,13 +41,4 @@ UserRoute.post('/login', async (req, res) => {
     } catch (e) {
         res.status(400).json('Something went wrong...')
     }
-
-
-    // try {
-    //     const user:any = await login(email, password)
-    //     const token = await generateToken(user)
-    //     res.status(200).json(token);
-    // } catch (e) {
-    //     res.status(400).json(e)
-    // }
 })

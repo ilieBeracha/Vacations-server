@@ -4,9 +4,8 @@ import { VacationInterface } from "../4-models/VacationModel";
 import { deleteImageFromS3, saveImagesToS3 } from "./awsLogic";
 const uniqid = require('uniqid');
 
-export async function getAllVacations(offset: number) {
-    // const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName FROM vacations ORDER BY startingDate LIMIT 10 OFFSET ${offset}`;
-    const query = 'SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName, (select vl.userId from likes vl where vl.userId = 42 and vl.vacationId = v.id) as userLikes, (select count(*) from likes vl where vl.vacationId = v.id) as totalLikes from vacations.vacations v ORDER BY startingDate limit 10 offset 0'
+export async function getAllVacations(userId:number,offset: number) {
+    const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName, (select vl.userId from likes vl where vl.userId = ${userId} and vl.vacationId = v.id) as userLikes, (select count(*) from likes vl where vl.vacationId = v.id) as totalLikes from vacations.vacations v ORDER BY startingDate limit 10 offset ${offset}`
     const [results] = await execute<OkPacket>(query);
     return results;
 }
@@ -46,7 +45,6 @@ export async function editVacation(vacation: VacationInterface, file: any) {
         const { destination, description, startingDate, endingDate, price, id } = vacation;
         const query = 'UPDATE vacations SET destination = ?, description = ?, startingDate = ?, endingDate = ?, price = ? WHERE id = ?';
         const [results] = await execute<OkPacket>(query, [destination, description, startingDate, endingDate, price, id]);
-        console.log(results);
         return results;
     }
 

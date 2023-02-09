@@ -8,6 +8,7 @@ export async function verifyUser(req: Request, res: Response, next: NextFunction
         res.status(401).send('Token not found');
         return;
     }
+    
     try {
         verify(token, PRIVATE_KEY);        
         next();

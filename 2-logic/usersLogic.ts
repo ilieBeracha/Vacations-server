@@ -18,7 +18,6 @@ export async function register(user: UserInterface) {
     } else {
         const query = 'INSERT INTO users(firstName,lastName,email,password) VALUES(?,?,?,?)'
         const [results] = await execute<OkPacket>(query, [firstName, lastName, email, password])
-        console.log(results)
         user.id = results.insertId;
         user.role = "USER"
         return results
