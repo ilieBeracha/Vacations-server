@@ -1,17 +1,21 @@
 import express from 'express';
 import { execute } from '../1-dal/dalSql';
 import { getIdFromToken } from '../1-dal/jwt';
-import { addVacation, deleteVacation, editVacation, getActiveVacations, getAllVacations, getComingVacations, getLikedVacationByUser, getSumOfActiveVacation, getSumOfComingVacation, getSumOfLikedVacationByUser, getSumOfVacations } from '../2-logic/vacationLogic';
+import { addVacation, deleteVacation, editVacation, getAllVacations, getSumOfVacations } from '../2-logic/vacationLogic';
 import { verifyUser } from '../3-middlewares/verifyUser';
 
 export const VacationRoute = express.Router();
 
 VacationRoute.get('/vacation', verifyUser, async (req: any, res: any) => {
     const offset = req.query.offset || 0
+    const likes = req.query.likes
+    const active = req.query.active
+    const coming = req.query.coming
+
     try {
         const token = req.headers.authorization;
         const userId: any = await getIdFromToken(token);
-        const response = await getAllVacations(userId,+offset);
+        const response = await getAllVacations(userId, +offset, likes, active, coming);
         res.status(200).json(response)
     } catch (e) {
         res.status(400).json(e)
@@ -53,73 +57,13 @@ VacationRoute.put('/vacation/edit', async (req: any, res: any) => {
 })
 
 VacationRoute.get('/vacation/sum', async (req, res) => {
-    try {
-        const response = await getSumOfVacations();
-        res.status(200).json(response)
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/active', async (req, res) => {
-    const offset = req.query.offset || 0
+    const likes = req.query.likes
+    const active = req.query.active
+    const coming = req.query.coming
     try {
         const token = req.headers.authorization;
         const userId: any = await getIdFromToken(token);
-        const response = await getActiveVacations(userId,+offset);
-        res.status(200).json(response);
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/active/sum', async (req, res) => {
-    try {
-        const response = await getSumOfActiveVacation();
-        res.status(200).json(response)
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/coming', async (req, res) => {
-    const offset = req.query.offset || 0
-    try {
-        const token = req.headers.authorization;
-        const userId: any = await getIdFromToken(token);
-        const response = await getComingVacations(userId,+offset);
-        res.status(200).json(response);
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/coming/sum', async (req, res) => {
-    try {
-        const response = await getSumOfComingVacation();
-        res.status(200).json(response)
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/likes', async (req, res) => {
-    const offset = req.query.offset || 0
-    try {
-        const token = req.headers.authorization;
-        const userId: any = await getIdFromToken(token);
-        const response = await getLikedVacationByUser(userId, +offset);
-        res.status(200).json(response)
-    } catch (e) {
-        res.status(400).json(e)
-    }
-})
-
-VacationRoute.get('/vacation/likes/sum', async (req, res) => {
-    try {
-        const token = req.headers.authorization;
-        const userId: any = await getIdFromToken(token);
-        const response = await getSumOfLikedVacationByUser(userId);
+        const response = await getSumOfVacations(userId, likes, active, coming);
         res.status(200).json(response)
     } catch (e) {
         res.status(400).json(e)
