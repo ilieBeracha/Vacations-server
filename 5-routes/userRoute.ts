@@ -20,9 +20,7 @@ UserRoute.post('/register', async (req, res) => {
         res.status(200).json(token)
 
     } catch (e) {
-        res.status(400).json(e)
-        console.log(e);
-        
+        res.status(400).json(e)        
     }
 })
 

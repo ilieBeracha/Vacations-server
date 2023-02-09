@@ -58,7 +58,7 @@ export async function getSumOfVacations() {
 
 export async function getActiveVacations(userId: number, offset: number) {
     // const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName FROM vacations where startingDate < now() AND endingDate > now() LIMIT 10 OFFSET ${offset}`
-    const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName, (select vl.userId from likes vl where vl.userId = ${userId} and vl.vacationId = v.id) as userLikes, (select count(*) from likes vl where vl.vacationId = v.id) as totalLikes from vacations.vacations v where startingDate < now() AND endingDate > now() LIMIT 10 OFFSET ${offset}`
+    const query = `SELECT id ,destination, description, DATE_FORMAT(startingDate, "%Y-%m-%d") AS startingDate, DATE_FORMAT(endingDate, "%Y-%m-%d") AS endingDate, price, imageName, (select vl.userId from likes vl where vl.userId = ${userId} and vl.vacationId = v.id) as userLikes, (select count(*) from likes vl where vl.vacationId = v.id) as totalLikes from vacations.vacations v where startingDate < now() AND endingDate > now() ORDER BY startingDate LIMIT 10 OFFSET ${offset}`
     const [results] = await execute(query);
     return results;
 }
@@ -89,6 +89,7 @@ export async function getLikedVacationByUser(userId: number, offset: number) {
     JOIN likes l ON v.id = l.vacationId
     WHERE l.userId = ${userId}
     GROUP BY v.id
+    ORDER BY startingDate
     LIMIT 10 OFFSET ${offset}`
     const [results] = await execute<OkPacket>(query);
     return results;

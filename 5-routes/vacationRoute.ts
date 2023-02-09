@@ -109,7 +109,6 @@ VacationRoute.get('/vacation/likes', async (req, res) => {
         const token = req.headers.authorization;
         const userId: any = await getIdFromToken(token);
         const response = await getLikedVacationByUser(userId, +offset);
-        console.log(token);
         res.status(200).json(response)
     } catch (e) {
         res.status(400).json(e)
@@ -121,7 +120,6 @@ VacationRoute.get('/vacation/likes/sum', async (req, res) => {
         const token = req.headers.authorization;
         const userId: any = await getIdFromToken(token);
         const response = await getSumOfLikedVacationByUser(userId);
-        console.log(token);
         res.status(200).json(response)
     } catch (e) {
         res.status(400).json(e)
