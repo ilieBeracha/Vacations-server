@@ -25,8 +25,6 @@ VacationRoute.get('/vacation', verifyUser, async (req: any, res: any) => {
 VacationRoute.post('/vacation/add', verifyUser, async (req: any, res: any) => {
     const vacation = req.body
     const file = req.files.imageName
-    console.log(file);
-
     try {
         const response = await addVacation(vacation, file);
         res.status(200).json(response)
