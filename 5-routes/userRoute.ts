@@ -7,7 +7,6 @@ import { UserInterface } from '../4-models/UserModel';
 export const UserRoute = express.Router();
 
 UserRoute.post('/register', async (req, res) => {
-    
     const user: UserInterface = req.body;
     user.password = hashedPassword(user.password)
     try {
@@ -20,7 +19,7 @@ UserRoute.post('/register', async (req, res) => {
         res.status(200).json(token)
 
     } catch (e) {
-        res.status(400).json(e)        
+        res.status(400).json(e)
     }
 })
 
