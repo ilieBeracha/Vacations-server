@@ -4,7 +4,11 @@ import * as dotenv from 'dotenv'
 import { UserRoute } from "./5-routes/userRoute";
 import { VacationRoute } from "./5-routes/vacationRoute";
 import { LikesRoute } from "./5-routes/likesRoute";
-dotenv.config();
+const path = require('path');
+
+dotenv.config({
+    path: path.resolve(__dirname, `${process.env.NODE_ENV}.env`)
+});
 
 const fileUpload = require('express-fileupload');
 
